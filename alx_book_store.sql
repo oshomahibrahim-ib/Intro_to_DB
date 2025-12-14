@@ -1,39 +1,50 @@
-CREATE DATABASE alx_book_store;
+-- =================================================================
+-- File: alx_book_store.sql
+-- Description: MySQL script to create the alx_book_store database 
+--              and its required tables.
+-- =================================================================
 
+-- Step 1: Create the Database and select it for use
+CREATE DATABASE IF NOT EXISTS alx_book_store;
 USE alx_book_store;
 
-CREATE TABLE Authors (
-    author_id INT AUTO_INCREMENT PRIMARY KEY,
+-- Step 2: Create the Authors table
+CREATE TABLE IF NOT EXISTS Authors (
+    author_id INT PRIMARY KEY,
     author_name VARCHAR(215) NOT NULL
 );
 
-CREATE TABLE Books (
-    book_id INT AUTO_INCREMENT PRIMARY KEY,
+-- Step 3: Create the Customers table
+CREATE TABLE IF NOT EXISTS Customers (
+    customer_id INT PRIMARY KEY,
+    customer_name VARCHAR(215) NOT NULL,
+    email VARCHAR(215) NOT NULL UNIQUE,
+    address TEXT
+);
+
+-- Step 4: Create the Books table with a Foreign Key to Authors
+CREATE TABLE IF NOT EXISTS Books (
+    book_id INT PRIMARY KEY,
     title VARCHAR(130) NOT NULL,
-    author_id INT NOT NULL,
+    author_id INT,
     price DOUBLE NOT NULL,
     publication_date DATE,
     FOREIGN KEY (author_id) REFERENCES Authors(author_id)
 );
 
-CREATE TABLE Customers (
-    customer_id INT AUTO_INCREMENT PRIMARY KEY,
-    customer_name VARCHAR(215) NOT NULL,
-    email VARCHAR(215) NOT NULL,
-    address TEXT
-);
-
-CREATE TABLE Orders (
-    order_id INT AUTO_INCREMENT PRIMARY KEY,
-    customer_id INT NOT NULL,
+-- Step 5: Create the Orders table with a Foreign Key to Customers
+CREATE TABLE IF NOT EXISTS Orders (
+    order_id INT PRIMARY KEY,
+    customer_id INT,
     order_date DATE NOT NULL,
     FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
 );
 
-CREATE TABLE Order_Details (
-    orderdetailid INT AUTO_INCREMENT PRIMARY KEY,
-    order_id INT NOT NULL,
-    book_id INT NOT NULL,
+-- Step 6: Create the Order_Details table with Foreign Keys to Orders and Books
+CREATE TABLE IF NOT EXISTS Order_Details (
+    orderdetailid INT PRIMARY KEY,
+    order_id INT,
+    book_id INT,
     quantity DOUBLE NOT NULL,
     FOREIGN KEY (order_id) REFERENCES Orders(order_id),
     FOREIGN KEY (book_id) REFERENCES Books(book_id)
